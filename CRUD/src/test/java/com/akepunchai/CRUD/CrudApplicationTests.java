@@ -2,7 +2,6 @@ package com.akepunchai.CRUD;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.junit.jupiter.api.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -13,6 +12,9 @@ class CrudApplicationTests {
 	FizzBuzz i = new FizzBuzz();
 	findPrimeNum x = new findPrimeNum();
 
+	finonaci f = new finonaci();
+
+	//Test number if divine by 3 and 5
 	@Test
 	public void DivineBy5() {
 		assertThat(i.FizzBuzz(5), is("Buzz"));
@@ -30,6 +32,7 @@ class CrudApplicationTests {
 		assertThat(i.FizzBuzz(1), containsString("1"));
 	}
 
+	//Test Prime value
 	@Test
 	public void PrimeNumValue0() {
 		assertThat(x.primenum(0), is(false));
@@ -54,5 +57,13 @@ class CrudApplicationTests {
 	public void PrimeNumValueNegative() {
 		assertThat(x.primenum(-7), is(false));
 	}
+
+	//Test Fibonacci function
+	@Test
+	public void NormalValue(){assertThat(f.FibonacciV2(1),is(0));}
+	@Test
+	public void ValueLowerThan1(){assertThat(f.FibonacciV2(-1),is(0));}
+	@Test
+	public void RandomValue(){assertThat(f.FibonacciV2(7),is(8));}
 
 }
