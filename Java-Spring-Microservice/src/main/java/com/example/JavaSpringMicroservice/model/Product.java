@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
-
 @Entity
 @Table(name = "test1")
 @AllArgsConstructor
@@ -18,9 +16,7 @@ public class Product {
 
     @Id
     private int no;
-
     private String colum1;
-
     private int colum2;
 
 
