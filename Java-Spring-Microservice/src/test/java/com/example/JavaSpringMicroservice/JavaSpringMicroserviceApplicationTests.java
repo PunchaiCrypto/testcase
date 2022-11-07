@@ -7,17 +7,17 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.Matchers.*;
@@ -29,7 +29,9 @@ public class JavaSpringMicroserviceApplicationTests {
 	@Autowired
 	MockMvc mockMvc;
 
-
+	@Autowired
+	ObjectMapper mapper;
+	//Unsatisfied dependency expressed through field 'mapper'
 
 	@MockBean
 	ProductRepository productRepository;
@@ -54,7 +56,52 @@ public class JavaSpringMicroserviceApplicationTests {
 				.andExpect(jsonPath("$[1].colum1",is("secounddata")));
 	}
 
+	@Test
 	public void getOneRecord_success() throws  Exception {
-
+		Mockito.when(productRepository.findById(1L)).thenReturn(Optional.of(Record_1));
+		mockMvc.perform(MockMvcRequestBuilders
+						.get("/api/product/1")
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(jsonPath("$",notNullValue()))
+				.andExpect(jsonPath("$.no",is(1)));
 	}
+
+	@Test
+	public void createRecord_success() throws Exception {
+		Product product = Product.builder()
+				.colum1("tenthdata")
+				.colum2(2000).build();
+
+		Mockito.when(productRepository.save(product)).thenReturn(product);
+
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/product")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.content(this.mapper.writeValueAsString(product));
+
+		mockMvc.perform(mockRequest)
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$",notNullValue()))
+				.andExpect(jsonPath("$.colum1",is("tenthdata")));
+	}
+	@Test
+	public void updateProductRecord_success() throws Exception{
+		Product product = Product.builder()
+				.colum1("eleventhdata")
+				.colum2(11111).build();
+		Mockito.when(productRepository.findById(Record_1.getNo())).thenReturn(Optional.of(Record_1));
+		Mockito.when(productRepository.save(product)).thenReturn(product);
+
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/product")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.content(this.mapper.writeValueAsString(product));
+
+		mockMvc.perform(mockRequest)
+				.andExpect(status().is3xxRedirection())
+				.andExpect(jsonPath("$",notNullValue()))
+				.andExpect(jsonPath("$.colum1",is("eleventhdata")));
+	}
+
 }

@@ -1,9 +1,6 @@
 package com.example.JavaSpringMicroservice.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 @Entity
@@ -18,7 +15,9 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long no;
 
+    @NonNull
     private String colum1;
+
 
     private int colum2;
 

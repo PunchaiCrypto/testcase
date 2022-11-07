@@ -1,7 +1,7 @@
 package com.example.JavaSpringMicroservice.controller;
 
 import com.example.JavaSpringMicroservice.Repository.ProductRepository;
-import com.example.JavaSpringMicroservice.dto.ProductRequest;
+//import com.example.JavaSpringMicroservice.dto.ProductRequest;
 import com.example.JavaSpringMicroservice.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -55,6 +55,7 @@ public class ProductController {
         return repo.save(existingProductRecord);
     }
 
+    @DeleteMapping
     public void deleteProductById(@PathVariable(value = "Id") Long Id) throws ClassNotFoundException {
         if (repo.findById(Id).isEmpty()){
             throw new ClassNotFoundException("Patient with ID " + Id + " does not exist.");
