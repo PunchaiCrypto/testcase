@@ -15,9 +15,11 @@ import javax.persistence.*;
 public class Product {
 
     @Id
-    private int no;
-    private String colum1;
-    private int colum2;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long no;
 
+    private String colum1;
+
+    private int colum2;
 
 }
